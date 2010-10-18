@@ -6,8 +6,8 @@
 	        val N = int.parseInt(s(0));
 	        val result = DistArray.make[Double](Dist.makeUnique(), (Point)=>0.0D);
 	        finish  {
-	            for(p:Point(1) in result.dist) 
-	                async at(result.dist(p))
+	            for(p in result.dist.places()) 
+	                async at(p)
 	            {
 	                val r = new Random();
 	                var a:double=0.0D;
@@ -15,7 +15,7 @@
 	                    val x = r.nextDouble(), y=r.nextDouble();
 	                    if (x*x +y*y <= 1.0) a++;
 	                }
-	                result(p)=a;
+	                result(p.id)=a;
 	            }
 	        }
 	        val pi = 4*result.reduce(Double.+,0)/(N*Place.MAX_PLACES);

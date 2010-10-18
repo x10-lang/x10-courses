@@ -8,8 +8,8 @@ public class NQueensDist {
     public static val expectedSolutions =
         [0, 1, 0, 0, 2, 10, 4, 40, 92, 352, 724, 2680, 14200, 73712, 365596, 2279184, 14772512];
 
-    val N:Int, P:Int;
-    val results:DistArray[Int](1);
+    global val N:Int, P:Int;
+    global val results:DistArray[Int](1);
     def this(N:Int, P:Int) { 
         this.N=N; 
         this.P=P;
@@ -38,7 +38,7 @@ public class NQueensDist {
     }
 
     class Board {
-        val q: ValRail[Int];
+        global val q: ValRail[Int];
         def this() {
             q = ValRail.make[Int](0, (Int)=>0);
         }
@@ -46,7 +46,7 @@ public class NQueensDist {
             val n = old.length;
             q = ValRail.make[Int](n+1, (i:Int)=> (i < n? old(i) : newItem));
         }
-        def safe(j: int) {
+        global def safe(j: int) {
             val n = q.length;
             for ((k) in 0..n-1) {
                 if (j == q(k) || Math.abs(n-k) == Math.abs(j-q(k)))
@@ -57,13 +57,13 @@ public class NQueensDist {
         /** Search for all solutions in parallel, on finding
          * a solution update nSolutions.
          */
-        def search(R: Region(1)) {
+        global def search(R: Region(1)) {
             for ((k) in R)
                 if (safe(k))
                     new Board(q, k).search();
         }
 
-        def search()  {
+        global def search()  {
             if (q.length == N) {
                 atomic NQueensDist.this.results(here.id)++;
                 return;
