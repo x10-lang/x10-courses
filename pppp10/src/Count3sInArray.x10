@@ -1,4 +1,3 @@
-import x10.io.Console;
 import x10.util.Random;
 /**   
  *  Counts 3's in an array.
