@@ -6,6 +6,7 @@ import x10.util.Random;
 public class Count3sInArray {
     static val Meg = 1000*1000;
     val size:Int;
+    val numAsyncs:Int;
     var a:Rail[int]; 
     var count: int = 0;
     var expectedCount:int=0;
@@ -15,8 +16,10 @@ public class Count3sInArray {
     /**   
      *  Default constructor 
     */  
-    public def this(size:Int) {
+    public def this(size:Int, numAsyncs:Int) {
+        assert numAsyncs >= 1;
         this.size=size;
+        this.numAsyncs = numAsyncs;
         this.a = Rail.make[int](size, 0);
     }
     
@@ -24,12 +27,32 @@ public class Count3sInArray {
         populate();
         val time = System.nanoTime();
         count = 0;
-        count3s(0);
+        if (numAsyncs == 1) {
+            this.count = count3s();
+        } else {
+            finish {
+                for ((i)in 0..numAsyncs-2) async {
+                       val mc = count3s(i);
+                       atomic this.count += mc;
+                       }
+                count3s(numAsyncs-1);
+            }
+        }
         countTime += (System.nanoTime() - time)/Meg;
     }    
-    
-    public def count3s(id: int)
-    {
+    public def count3s(id:Int) {
+        val chunkSize = size/numAsyncs;
+        val start = chunkSize*id;
+        val end = start + chunkSize - 1;
+        var privateCount:Int=0;
+        val a_=this.a;
+        for (var i:int=start; i <=end ; i++)
+            if(a_(i) == 3)
+                privateCount++;
+        
+        return privateCount;
+    }
+    public def count3s():Int {
         val start = 0;
         val end = size-1;
         var privateCount:Int=0;
@@ -37,8 +60,7 @@ public class Count3sInArray {
         for (var i:int=start; i <=end ; i++)
             if(a_(i) == 3)
                 privateCount++;
-        
-        count += privateCount;     
+        return privateCount;
     }
     public def populate()
     {
@@ -77,12 +99,14 @@ public class Count3sInArray {
     */  
     public static def main(args:Rail[String]): Void {
         if (args.length < 1) {
-            Console.OUT.println("Usage: Count3sInArray <Size; should be multiple of 4>");
+            Console.OUT.println("Usage: Count3sInArray <Nmod4: size is 4*Nmod4> <NumAsync:Int, default 1>");
             return;
         }
-        val size = Int.parseInt(args(0));
-	        val numInvoke = 5; // number of repetitions
-	        val counter = new Count3sInArray(size);
+        val Nmod4 = Int.parseInt(args(0));
+        val size  = Nmod4 * 4;
+        val numAsyncs = args.length == 2 ? Int.parseInt(args(1)) : 1;
+	    val numInvoke = 5; // number of repetitions
+	    val counter = new Count3sInArray(size, numAsyncs);
 	        
 	        //warmup
 	        Console.OUT.println("[Warming up]");
