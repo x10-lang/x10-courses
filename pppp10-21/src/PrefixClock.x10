@@ -32,6 +32,7 @@ public class PrefixClock {
 	public static def main(args:Array[String](1)) {
 		if (args.size < 1) {
 			Console.OUT.println("Usage: <exec> <p:Int>");
+			return;
 		}
 		val P = Int.parseInt(args(0));
 		assert Utils.powerOf2(P) : " Must run with power of 2 activities.";
