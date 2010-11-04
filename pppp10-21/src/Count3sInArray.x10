@@ -120,6 +120,7 @@ public class Count3sInArray {
 	}
 	public def populateTime()=populateTime;
 	public def countTime()=countTime;
+	
 	public def reset() {
 		populateTime=0;
 		countTime=0;
@@ -142,12 +143,14 @@ public class Count3sInArray {
 		Console.OUT.println("[numAsyncs=" + numAsyncs + "]");
 		Console.OUT.println("[pctThrees=" + pctThrees + "]");
 		val numInvoke = 5; // number of repetitions
+		var createTime:Long= -System.nanoTime();
 		val counter = new Count3sInArray(size, numAsyncs, pctThrees);
-		
+		createTime += System.nanoTime();
+		createTime /= Meg;
 		//warmup
 		Console.OUT.println("[Warming up]");
 		counter.run();
-		Console.OUT.println(indent + "[Done, time=" + counter.populateTime() + " + " + counter.countTime() + "].");
+		Console.OUT.println(indent + "[Done, creation time=" + createTime + " time=" + counter.populateTime() + " + " + counter.countTime() + "].");
 		counter.validate();
 		counter.reset();
 		
