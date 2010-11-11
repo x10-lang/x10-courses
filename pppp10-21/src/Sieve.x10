@@ -1,7 +1,10 @@
 public class Sieve {
     public static def main(s:Array[String](1)) {
         val N = s.size > 0 ? Int.parseInt(s(0)) : 100;
-        primes(gen(N));
+        val time = System.nanoTime();
+        finish async
+            primes(gen(N));
+        Console.OUT.println("Time: " + ((System.nanoTime()-time)*1.0)/(1000*1000*1000) + " s.");
     }
     static def gen(N:Int):Clocked[Int] {
         val x = new Clocked[Int](2);

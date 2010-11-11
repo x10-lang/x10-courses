@@ -20,6 +20,7 @@ class Clocked[T](clock:Clock) implements ()=>T{
         <p>Rising edge: Wait for readers to finish, so you are clear to write.
         <p>Write.
         <p> Falling edge: Signal to readers that they are clera to read, do not block.
+    */
     public operator this() = (x:T) {
         clock.next(); // Rising edge
         this.v=x;  // Write
