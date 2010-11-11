@@ -1,8 +1,6 @@
 public class Sieve {
-
     public static def main(s:Array[String](1)) {
         val N = s.size > 0 ? Int.parseInt(s(0)) : 100;
-        val primesO = new Clocked[Int](0);
         primes(gen(N));
     }
     static def gen(N:Int):Clocked[Int] {
@@ -11,7 +9,7 @@ public class Sieve {
             for ([i] in 3..N) {
                 x() = i;
             }
-            x() = -1;
+            x() = -1; // terminate
         }
         return x;
     }
