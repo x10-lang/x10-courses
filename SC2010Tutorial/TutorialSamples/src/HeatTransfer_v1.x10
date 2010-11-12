@@ -65,15 +65,15 @@ public class HeatTransfer_v1 {
         }
     }
 
-    public static def main(Array[String]) {
-	Console.OUT.println("HeatTransfer Tutorial example with n="+n+" and epsilon="+epsilon);
-	Console.OUT.println("Initializing data structures");
-        val s = new HeatTransfer_v1();
-	Console.OUT.print("Beginning computation...");
-	val start = System.nanoTime();
-        s.run();
-	val stop = System.nanoTime();
-	Console.OUT.printf("...completed in %1.3f seconds.\n", ((stop-start) as double)/1e9);
-	s.prettyPrintResult();
-    }
+   public static def main(Array[String]) {
+       Console.OUT.println("HeatTransfer Tutorial example with n="+n+" and epsilon="+epsilon);
+       Console.OUT.println("Initializing data structures");
+       val s = new HeatTransfer_v1();
+       Console.OUT.print("Beginning computation...");
+       val start = System.nanoTime();
+       s.run();
+       val stop = System.nanoTime();
+       Console.OUT.printf("...completed in %1.3f seconds.\n", ((stop-start) as double)/1e9);
+       s.prettyPrintResult();
+   }
 }

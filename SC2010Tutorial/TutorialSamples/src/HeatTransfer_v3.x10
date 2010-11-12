@@ -1,4 +1,3 @@
-// Yoav added: IGNORE_FILE
 /*
  *  This file is part of the X10 project (http://x10-lang.org).
  *
@@ -59,16 +58,16 @@ public class HeatTransfer_v3 {
     //       class library in x10.array.
     static def blockIt(d:Dist(2), numProcs:int):Array[ArrayList[Point(2)]](1) {
         val ans = new Array[ArrayList[Point(2)]](numProcs, (int) => new ArrayList[Point(2)]());
-	var modulo:int = 0;
+        var modulo:int = 0;
         for (p in d) {
-	    ans(modulo).add(p);
+            ans(modulo).add(p);
             modulo = (modulo + 1) % numProcs;
         }
-	return ans;
+        return ans;
     }
 
     def run() {
-	val D_Base = Dist.makeUnique(D.places());
+        val D_Base = Dist.makeUnique(D.places());
         var delta:Double = 1.0;
         do {
             finish ateach (z in D_Base) {
@@ -90,7 +89,7 @@ public class HeatTransfer_v3 {
            for ([j] in A.region.projection(1)) {
                 val pt = Point.make(i,j);
                 at (BigD(pt)) { 
-		    val tmp = A(pt);
+                    val tmp = A(pt);
                     at (Place.FIRST_PLACE) Console.OUT.printf("%1.4f ", tmp);
                 }
             }
@@ -99,14 +98,14 @@ public class HeatTransfer_v3 {
     }
 
     public static def main(Array[String]) {
-	Console.OUT.println("HeatTransfer Tutorial example with n="+n+" and epsilon="+epsilon);
-	Console.OUT.println("Initializing data structures");
+        Console.OUT.println("HeatTransfer Tutorial example with n="+n+" and epsilon="+epsilon);
+        Console.OUT.println("Initializing data structures");
         val s = new HeatTransfer_v3();
-	Console.OUT.print("Beginning computation...");
-	val start = System.nanoTime();
+        Console.OUT.print("Beginning computation...");
+        val start = System.nanoTime();
         s.run();
-	val stop = System.nanoTime();
-	Console.OUT.printf("...completed in %1.3f seconds.\n", ((stop-start) as double)/1e9);
-	s.prettyPrintResult();
+        val stop = System.nanoTime();
+        Console.OUT.printf("...completed in %1.3f seconds.\n", ((stop-start) as double)/1e9);
+        s.prettyPrintResult();
     }
 }

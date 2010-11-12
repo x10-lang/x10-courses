@@ -42,7 +42,7 @@ public class HeatTransfer_v2 {
     }
 
     def run() {
-	val D_Base = Dist.makeUnique(D.places());
+    val D_Base = Dist.makeUnique(D.places());
         var delta:Double = 1.0;
         do {
             finish ateach (z in D_Base)
@@ -59,7 +59,7 @@ public class HeatTransfer_v2 {
            for ([j] in A.region.projection(1)) {
                 val pt = Point.make(i,j);
                 at (BigD(pt)) { 
-		    val tmp = A(pt);
+            val tmp = A(pt);
                     at (Place.FIRST_PLACE) Console.OUT.printf("%1.4f ", tmp);
                 }
             }
@@ -68,14 +68,14 @@ public class HeatTransfer_v2 {
     }
 
     public static def main(Array[String]) {
-	Console.OUT.println("HeatTransfer Tutorial example with n="+n+" and epsilon="+epsilon);
-	Console.OUT.println("Initializing data structures");
+        Console.OUT.println("HeatTransfer Tutorial example with n="+n+" and epsilon="+epsilon);
+        Console.OUT.println("Initializing data structures");
         val s = new HeatTransfer_v2();
-	Console.OUT.print("Beginning computation...");
-	val start = System.nanoTime();
+        Console.OUT.print("Beginning computation...");
+        val start = System.nanoTime();
         s.run();
-	val stop = System.nanoTime();
-	Console.OUT.printf("...completed in %1.3f seconds.\n", ((stop-start) as double)/1e9);
-	s.prettyPrintResult();
+        val stop = System.nanoTime();
+        Console.OUT.printf("...completed in %1.3f seconds.\n", ((stop-start) as double)/1e9);
+        s.prettyPrintResult();
     }
 }
