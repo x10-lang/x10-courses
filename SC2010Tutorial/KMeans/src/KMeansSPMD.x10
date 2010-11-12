@@ -40,16 +40,15 @@ public class KMeansSPMD {
         
         try {
             
-            val opts = new OptionsParser(args, [
-                                                Option("q","quiet","just print time taken"),
-                                                Option("v","verbose","print out each iteration")
-                                                ], [
-                                                    Option("p","points","location of data file"),
-                                                    Option("i","iterations","quit after this many iterations"),
-                                                    Option("c","clusters","number of clusters to find"),
-                                                    Option("d","dim","number of dimensions"),
-                                                    Option("s","slices","factor by which to oversubscribe computational resources"),
-                                                    Option("n","num","quantity of points")]);
+            val opts = new OptionsParser(args, 
+                    [Option("q","quiet","just print time taken"),
+                     Option("v","verbose","print out each iteration")], 
+                    [Option("p","points","location of data file"),
+                     Option("i","iterations","quit after this many iterations"),
+                     Option("c","clusters","number of clusters to find"),
+                     Option("d","dim","number of dimensions"),
+                     Option("s","slices","factor by which to oversubscribe computational resources"),
+                     Option("n","num","quantity of points")]);
             val fname = opts("-p", "points.dat"), num_clusters=opts("-c",4),
             num_slices=opts("-s",1), num_global_points=opts("-n", 2000),
             iterations=opts("-i",50), dim=opts("-d", 4);
