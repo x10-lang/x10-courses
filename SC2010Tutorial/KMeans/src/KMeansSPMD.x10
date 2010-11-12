@@ -49,7 +49,7 @@ public class KMeansSPMD {
                      Option("d","dim","number of dimensions"),
                      Option("s","slices","factor by which to oversubscribe computational resources"),
                      Option("n","num","quantity of points")]);
-            val fname = opts("-p", "points.dat"), num_clusters=opts("-c",4),
+            val fname = opts("-p", ""), num_clusters=opts("-c",4),
             num_slices=opts("-s",1), num_global_points=opts("-n", 2000),
             iterations=opts("-i",50), dim=opts("-d", 4);
             val verbose = opts("-v"), quiet = opts("-q");
@@ -58,10 +58,19 @@ public class KMeansSPMD {
                 Console.OUT.println("points: "+num_global_points+" clusters: "+num_clusters+" dim: "+4);
             
             // file is dimension-major
-            val file = new File(fname), fr = file.openRead();
-            val init_points = (int) => Float.fromIntBits(Marshal.INT.read(fr).reverseBytes());
-            val num_file_points = (file.size() / dim / 4) as Int;
-            val file_points = new Array[Float](num_file_points*dim, init_points);
+            val file_points:Array[Float](1);
+            val num_file_points:int;
+            if (fname.equals("")) {
+                // Modification for tutorial: use random data if input file not provided
+                val rnd = new x10.util.Random(0);
+                num_file_points = num_global_points*dim;
+                file_points = new Array[Float](num_file_points, (int)=>rnd.nextFloat());
+            } else {
+                val file = new File(fname), fr = file.openRead();
+                val init_points = (int) => Float.fromIntBits(Marshal.INT.read(fr).reverseBytes());
+                num_file_points = (file.size() / dim / 4) as Int;
+                file_points = new Array[Float](num_file_points*dim, init_points);
+             }
             
             //val team = Team.WORLD;
             val team = Team(new Array[Place](num_slices * Place.MAX_PLACES, (i:int) => Place.place(i/num_slices)));
