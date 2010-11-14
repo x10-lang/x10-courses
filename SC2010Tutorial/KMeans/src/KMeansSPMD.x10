@@ -158,7 +158,7 @@ public class KMeansSPMD {
                             
                             // TEST FOR CONVERGENCE
                             for (var j:Int=0 ; j<num_clusters*dim ; ++j) {
-                                if (true/*||Math.abs(clusters_old(j)-host_clusters(j))>0.0001*/) continue main_loop;
+                                if (Math.abs(old_clusters(j)-host_clusters(j))>0.0001) continue main_loop;
                             }
                             
                             break;
