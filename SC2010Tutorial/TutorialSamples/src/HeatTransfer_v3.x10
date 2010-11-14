@@ -19,7 +19,7 @@ import x10.util.ArrayList;
  * All of the example programs in the series are computing
  * the same thing:  solving a set of 2D partial differential
  * equations that can be expressed as an iterative 4-point
- * stencil operation.  See the X10 2.0 tutorial for
+ * stencil operation.  See the X10 2.1 tutorial for
  * for more details and some pictures.</p>
  *
  * This program is illustrating explicit loop chunking 
