@@ -81,8 +81,8 @@ X10_CLASSES= Geometric.x10 \
             Counter.x10 \
             Runner.x10
 
-X10_CLASSES_CC=$(X10_CLASSES:.x10=.cc) Fib__Anonymous.cc Fib__Fib2.cc
-X10_CLASSES_H=$(X10_CLASSES:.x10=.h) Fib__Anonymous.h Fib__Fib2.h
+X10_CLASSES_CC=$(X10_CLASSES:.x10=.cc) Fib__Anonymous__0.cc Fib__Fib2.cc
+X10_CLASSES_H=$(X10_CLASSES:.x10=.h) Fib__Anonymous__0.h Fib__Fib2.h
 
 TARGET= Fib
 
