@@ -8,7 +8,7 @@ public class MontyPiCF {
     	var start:double = - System.nanoTime();
     	val reducer = new Reducible[Double]() {
     		public def zero()=0.0D;
-    		public def apply(a:Double, b:Double)=a+b;
+    		public operator this(a:Double, b:Double)=a+b;
     	};
     	val result = finish(reducer) {
     		for (p in Dist.makeUnique().places()) async at (p) {

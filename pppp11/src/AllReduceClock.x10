@@ -17,7 +17,7 @@ public class AllReduceClock {
     clocked finish  {
     	for (p in red.dist.places()) clocked async at(p) {
     		var shift_:Int=1;
-    		for ([phase] in 0..phases-1) {
+    		for (phase in 0..(phases-1)) {
     			val e = even(phase);
     			val destId = (p.id+shift_)% P;
     			if (e) {
@@ -31,7 +31,7 @@ public class AllReduceClock {
     				}
     			}
     			shift_ *=2;
-    			next;
+    			Clock.advanceAll();
     		}
     	}
     }

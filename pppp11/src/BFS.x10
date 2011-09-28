@@ -26,16 +26,16 @@ public class BFS {
 	    }
 	    
 	    public def visit(c:Clock) {
-	    	for (v in edges)  
+	    	for (v in edges.values())  
 	    		if (v.first(this))  async clocked(c) {
-	    			next;
+	    			Clock.advanceAll();
 	    			v.visit(c);
 	    		}	
 	    }
 	    def edgeString() {
 	    	if (edges==null) return "";
 	    	var r:String = "";
-	    	for (v in edges)
+	    	for (v in edges.values())
 	    		r += " " + v.id;
 	    	return r;
 	    }
@@ -45,11 +45,11 @@ public class BFS {
 	public static def main(args:Array[String](1)) {
 		val N = Int.parseInt(args(0));
 		Console.OUT.println("N=" + N);
-		val vertices = Rail.make(N, (i:Int)=> new V(i));
+		val vertices = new Rail[V](N, (i:Int)=> new V(i));
 		val r = new Random();
-		for (v in vertices) {
+		for (v in vertices.values()) {
 			val N1 = Math.min(Math.abs(r.nextInt(N))+1, 4);
-			v.set(Rail.make[V](N1, (i:Int)=> 
+			v.set(new Rail[V](N1, (i:Int)=> 
 				vertices(i==0? (v.id == N-1? N-1 : v.id+1)
 						: Math.abs(r.nextInt(N)))));
 		}
