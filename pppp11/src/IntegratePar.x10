@@ -28,7 +28,7 @@ public class IntegratePar {
 	}
 	
 	public static def main(args:Array[String](1)) {
-		val obj = new Integrate((x:double)=>x*x+x);
+		val obj = new IntegratePar((x:double)=>x*x+x);
 		val xMax = args.size > 0 ? Int.parseInt(args(0)) : 10;
 		var start:double = - System.nanoTime();
 		val area = obj.computeArea(0, xMax);
