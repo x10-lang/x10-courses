@@ -12,8 +12,10 @@ class AtProblem {
 	
 	
 	public static def main(args:Array[String]) {
-		val bad = args.size>0;
-		val a = new Array[Array[int]](Place.MAX_PLACES, (i:int)=>new Array[int](1000, (i:int)=>i));
+		val bad = args.size==0;
+		val strong = args.size>0 && args(0).equals("s");
+		val div = strong ? Place.MAX_PLACES : 1;
+		val a = new Array[Array[int]](Place.MAX_PLACES, (i:int)=>new Array[int](1024/div, (i:int)=>i));
 		if (bad) {
 			for (1..20) {
 				for (p in Place.places()) {
