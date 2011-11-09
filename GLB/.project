@@ -6,7 +6,7 @@
 	</projects>
 	<buildSpec>
 		<buildCommand>
-			<name>x10dt.ui.launch.java.X10JavaBuilder</name>
+			<name>x10dt.ui.launch.cpp.X10CppBuilder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
@@ -22,8 +22,8 @@
 		</buildCommand>
 	</buildSpec>
 	<natures>
-		<nature>org.eclipse.jdt.core.javanature</nature>
-		<nature>x10dt.ui.launch.java.x10nature</nature>
+		<nature>x10dt.ui.launch.cpp.x10nature</nature>
 		<nature>org.eclipse.imp.smapifier.smapinature</nature>
+		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
 </projectDescription>
