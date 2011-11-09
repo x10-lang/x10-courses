@@ -39,6 +39,7 @@ public class UTS {
     @NativeRep ("c++", "examples::UTS::UTS__SHA1Rand", "examples::UTS::UTS__SHA1Rand", null)
     @NativeCPPCompilationUnit ("sha1.c")
 	@NativeCPPCompilationUnit ("UTS__SHA1Rand.cc")
+	@NativeCPPOutputFile("UTS__SHA1Rand.h")
 	public static struct SHA1Rand {
 	public def this (seed:Int) { }
 	public def this (parent:SHA1Rand) { }
