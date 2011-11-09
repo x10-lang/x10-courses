@@ -109,7 +109,7 @@ class LU {
         val _A = A;
         
         @Pragma(Pragma.FINISH_ASYNC_AND_BACK) finish{
-        	async at (Place(dest)){
+        	at (Place(dest)) async {
         	    @Pragma(Pragma.FINISH_ASYNC) finish{
         			Array.asyncCopy[Double](remoteBuffer, 0, _buffers(), 0, size);
         		}
@@ -289,7 +289,7 @@ class LU {
             val remoteRowBuffer = new RemoteArray(rowBuffer);
             val _B = B;
             @Pragma(Pragma.FINISH_ASYNC_AND_BACK) finish{
-				async at(Place(A_here.placeOfBlock(I, J))){
+				at(Place(A_here.placeOfBlock(I, J))) async {
 					Array.asyncCopy(_A().block(I, J).raw, 0, remoteRowBuffer, 0, _B * _B);
 				}
 	    	}
