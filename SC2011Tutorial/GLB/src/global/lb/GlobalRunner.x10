@@ -91,7 +91,7 @@ public final class GlobalRunner[T, Z]  implements Runner[T,Z] {
 		val st = this.st;
 		val allCounters 
 		= new Rail[Counter](Place.MAX_PLACES,
-				(i:Int) => at(Place(i)) st().counter);
+				(i:Int) => { val p = Place(i); at(p) st().counter});
 		st().counter.stats(allCounters, time, verbose);
 	}
 	
@@ -335,7 +335,8 @@ public final class GlobalRunner[T, Z]  implements Runner[T,Z] {
 					val lifeline:Int = myLifelines(i);
 					if (!lifelinesActivated(lifeline) ) {
 						lifelinesActivated(lifeline) = true;
-						loot = at(Place(lifeline)) st().trySteal(p, true);
+						val lp = Place(lifeline);
+						loot = at(lp) st().trySteal(p, true);
 						if (null!=loot) {
 							lifelinesActivated(lifeline) = false;
 							Event.event("Received loot (" + loot.size +
