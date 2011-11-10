@@ -6,11 +6,6 @@
 	</projects>
 	<buildSpec>
 		<buildCommand>
-			<name>x10dt.ui.launch.cpp.X10CppBuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-		<buildCommand>
 			<name>org.eclipse.ui.externaltools.ExternalToolBuilder</name>
 			<triggers>full,incremental,</triggers>
 			<arguments>
@@ -20,9 +15,14 @@
 				</dictionary>
 			</arguments>
 		</buildCommand>
+		<buildCommand>
+			<name>x10dt.ui.launch.java.X10JavaBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
-		<nature>x10dt.ui.launch.cpp.x10nature</nature>
+		<nature>x10dt.ui.launch.java.x10nature</nature>
 		<nature>org.eclipse.imp.smapifier.smapinature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
