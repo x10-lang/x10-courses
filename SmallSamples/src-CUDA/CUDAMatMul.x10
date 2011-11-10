@@ -9,14 +9,14 @@ public class CUDAMatMul {
     //
     //  auxiliary routines
     //  
-    static def fill (A:Array[Float](1){rail}, n:Int, maxi:Int)
+    static def fill (A:Rail[Float], n:Int, maxi:Int)
     {
         val r = new Random();
         for(j in 0..(n-1))
             A(j) = (r.nextInt(maxi*2) - maxi) / (maxi + 1.0f);
     }
 
-    static def diff (m:Int, n:Int, A:Array[Float](1){rail}, lda:Int, B:Array[Float](1){rail}, ldb:Int )
+    static def diff (m:Int, n:Int, A:Rail[Float], lda:Int, B:Rail[Float], ldb:Int )
     {
         var err:Float = 0;
         for(j in 0..(n-1))
@@ -42,7 +42,7 @@ public class CUDAMatMul {
             //sgemmNN<<<grid, threads>>>( A, lda, B, ldb, C, ldc, k, alpha, beta );
             finish async at (gpu) @CUDA @CUDADirectParams {
                 finish for (block in 0..((m*n/64/16)-1)) async {
-                    val bs = new Array[Float](16*17, 0);
+                    val bs = new Rail[Float](16*17, 0);
                     clocked finish for (thread in 0..63) clocked async {
                         val inx = thread % 16;
                         val iny = thread / 16;
@@ -68,7 +68,9 @@ public class CUDAMatMul {
 
                             Clock.advanceAll();
 
-                            @Unroll(16)for (i in 0..(16-1)) {
+                            /* DISABLED UNROLL PRAGMA FOR TUTORIAL to avoid breaking Javac...generated method gets too big. */
+                            /*@Unroll(16) */ 
+                            for (i in 0..(16-1)) {
                                 @Unroll(16) for (j in 0..(16-1)) {
                                     c(j) = c(j) + A(A_idx + i*lda) * bs(i*17 + j);
                                 }
@@ -96,7 +98,7 @@ public class CUDAMatMul {
     }
 
 
-    public static def main (args : Array[String]) {
+    public static def main (args : Rail[String]) {
 
         val N = 4096;
 
@@ -109,9 +111,9 @@ public class CUDAMatMul {
         val dB = CUDAUtilities.makeRemoteArray(gpu, N*N, 0 as Float);
         val dC = CUDAUtilities.makeRemoteArray(gpu, N*N, 0 as Float);
 
-        val A = new Array[Float](N*N);
-        val B = new Array[Float](N*N);
-        val C = new Array[Float](N*N);
+        val A = new Rail[Float](N*N);
+        val B = new Rail[Float](N*N);
+        val C = new Rail[Float](N*N);
 
         fill( A, N*N, 31 );
         fill( B, N*N, 31 );
@@ -122,8 +124,8 @@ public class CUDAMatMul {
             Array.asyncCopy(B, 0, dB, 0, N*N);
         }
 
-        val cublas_result = new Array[Float](N*N);
-        val our_result = new Array[Float](N*N);
+        val cublas_result = new Rail[Float](N*N);
+        val our_result = new Rail[Float](N*N);
 
         //
         //  bench square matrices
