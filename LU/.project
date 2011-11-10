@@ -6,18 +6,18 @@
 	</projects>
 	<buildSpec>
 		<buildCommand>
-			<name>x10dt.ui.launch.cpp.X10CppBuilder</name>
+			<name>org.eclipse.imp.smapifier.SmapieBuilder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>org.eclipse.imp.smapifier.SmapieBuilder</name>
+			<name>x10dt.ui.launch.java.X10JavaBuilder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
 	</buildSpec>
 	<natures>
-		<nature>x10dt.ui.launch.cpp.x10nature</nature>
+		<nature>x10dt.ui.launch.java.x10nature</nature>
 		<nature>org.eclipse.imp.smapifier.smapinature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
