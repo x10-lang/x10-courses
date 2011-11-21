@@ -38,7 +38,7 @@ public class Clocked[T](clock:Clock) implements ()=>T{
      */
     public def this(x:T, c:Clock, s:String) {
         property(c);
-        this.a= [x as T, x]; 
+        this.a= new Array[T](2, (Int)=>x); 
         this.name=s;
     }
     /**
