@@ -15,7 +15,7 @@ public class StreamImp[T] implements Stream[T], List[T,Stream[T]] {
 	
 	public def this(x:T){ this(x,null);}
 	//public def this(x:T, y:Stream[T]){ this.x=x; this.y=y;}
-	public def this(x:T, y:()=>Stream[T]){ this.x=x; this.y=LazyStreamImp(y);}
+	public def this(x:T, y:()=>Stream[T]){ this.x=x; this.y=new LazyStreamImp(y);}
 
 	public operator this():List[T,Stream[T]]=Cons(x as T,y as Stream[T]);
 	

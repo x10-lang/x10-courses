@@ -14,7 +14,9 @@ public class Hamming {
 	public static def main(args: Array[String](1)) {
 		val N = args.size > 0 ? Int.parseInt(args(0)) : 10;
 		Console.OUT.print("hamming " + N + " = " ); 
+		var time:Long = System.nanoTime();
 		h().print(N);	
+		Console.OUT.println("Time:" + (System.nanoTime()-time)/(1000*1000*1000)+ " ns.");    
 	}
 
 }
