@@ -18,7 +18,7 @@
     @author vj
  */
 public class Clocked[T](clock:Clock) implements ()=>T{
-    var a:Array[T]{rail};
+    var a:Rail[T];
     val name:String; // for documentation
 
     /** Construct a Clocked[T] with initial value x,and name "".
@@ -38,7 +38,7 @@ public class Clocked[T](clock:Clock) implements ()=>T{
      */
     public def this(x:T, c:Clock, s:String) {
         property(c);
-        this.a= new Array[T](2, (Int)=>x); 
+        this.a= new Rail[T](2, x); 
         this.name=s;
     }
     /**

@@ -1,9 +1,9 @@
-//package pppp.lib.lazystream.examples;
+package pppp.lib.lazystream.examples;
 import pppp.lib.lazystream.*;
 
 import x10.util.Ordered;
 import pppp.util.Logger;
-public class LazyHamming {
+public class Hamming {
 	
 	/**
 	 *  X = 1:omerge(2*X,omerge(3*X,5*X))

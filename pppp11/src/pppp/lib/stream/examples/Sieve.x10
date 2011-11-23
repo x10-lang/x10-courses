@@ -1,3 +1,4 @@
+package pppp.lib.stream.examples;
 /** An implementation of the Sieve of Eratosthenes,
     using clocked variables.
 

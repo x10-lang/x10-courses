@@ -76,7 +76,6 @@ public class Monitor {
 			}
 			Logger.debug(()=>"Monitor: " + this  + " 1 action " + action);
 			val result=action();
-			
 			// now awaken everyone to try.
 			val m=size;
 			Logger.debug(() => "Monitor : " + this + " 2 awakening size=" + m);
@@ -84,7 +83,6 @@ public class Monitor {
 				size--;
 				Logger.debug((i:Int)=> "Monitor: " + this + " 3 (" + i + ") waking " 
 						+  threads(size).toString(), i);
-				
 				threads(size).unpark();
 				threads(size)=null;
 			}

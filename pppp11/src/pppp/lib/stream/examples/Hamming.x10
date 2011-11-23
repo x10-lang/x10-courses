@@ -1,3 +1,5 @@
+package pppp.lib.stream.examples;
+
 import pppp.lib.stream.*;
 import pppp.util.Logger;
 import pppp.util.Utils;

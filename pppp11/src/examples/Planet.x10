@@ -52,7 +52,7 @@ public struct Planet {
 	public static val Planets=[MERCURY,VENUS,EARTH,MARS,JUPITER,SATURN,
 	                          URANUS,NEPTUNE,PLUTO].values();
 	
-	public static def main(args:Array[String](0)) {
+	public static def main(args:Array[String](1)) {
 		if (args.size !=2) {
 			Console.OUT.println("Usage: <weight:Double> <name:String>");
 			return;
