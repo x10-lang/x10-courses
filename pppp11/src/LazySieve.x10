@@ -1,26 +1,31 @@
 //package pppp.lib.lazystream.examples;
 
-import pppp.lib.lazystream.*;
+import pppp.lazystream.*;
 
 import x10.util.Ordered;
 import pppp.util.Logger;
-import pppp.lib.lazystream.Utils;
+
 /**
  * The Sieve of Eratosthenes.
  */
 public class LazySieve {
-	
-	static def primes()=primes(Utils.Gen(2 as Int, (n:Int)=>n+1));
-	
-	static def multiple(p:Int)=(x:Int):Boolean=>x%p==0;
-	
-	static def primes(r:Stream[Int]):Stream[Int] = {
-		val p = r.x(), s=r.y();
-		new StreamImp[Int](p, ()=>primes(s % multiple(p)))
-	}
-	public static def main(args: Array[String](1)) {
-		val N = args.size > 0 ? Int.parseInt(args(0)) : 10;
-		Console.OUT.print("primes " + N + " = " ); 
-		primes().print(N);	
-	}
+
+    static def primes()=primes(Stream.nats(2));
+    
+    static def primeFor(p:Int)=(x:Int):Boolean=> x%p !=0;
+    
+    static def primes(r:Stream[Int]):Stream[Int] = () => {
+        val rc = r(), p=rc.h;
+        new Cons(p, primes(rc.t % primeFor(p)))
+    };
+       
+
+    public static def main(args: Array[String](1)) {
+        val N = args.size > 0 ? Int.parseInt(args(0)) : 10;
+        Console.OUT.print("primes " + N + " = " ); 
+        var time:Long = System.nanoTime();
+        primes().force(N);	
+        Console.OUT.println("Time:" 
+                + (System.nanoTime()-time)*1.0/(1000*1000*1000)+ " s.");   
+    }
 }
