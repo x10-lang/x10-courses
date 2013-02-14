@@ -1,0 +1,43 @@
+<html>
+This package implements lazy, recursively defined, potentially infinite, 
+many reader, functional streams (cf Landin streams). As a stream is evaluated 
+it turns into a sequence of cons'es, hence subsequent traversals of the stream 
+are very cheap. The implementation is sequential.
+
+<p> The central operation on a stream <tt>s</tt> (of type 
+<tt>Stream[T]</tt>) is a <em>force</em> operation
+(<tt>s()</tt>). This yields a <tt>Cons[T,Stream[T]]</tt> which provides
+the first element of a stream, and (recursively) the rest of the stream
+(sometimes called the "top-level cons"). This captures the idea of Friedman 
+and Wise that "cons should not evaluate its arguments". To generate successive
+elements of the stream the corresponding tails must be forced.
+
+<p> In an eager language like X10 a thunk (an expression of type <tt>()=>T</tt>,
+for some type <tt>T</tt>) is used to enforce delayed evaluation. 
+
+<p> Various stream operators are defined which make it easy for 
+programmers to write readable stream programs. See <tt>ppp.lazystream.examples</tt> 
+for several example stream programs. 
+
+<p>For recursive definitions over streams, care must be taken to ensure 
+that each "force" of a stream evaluates its input streams to only as much 
+depth as necessary in order to generate the top level cons.
+Static methods and variables may be used for recursive definitions.
+For example:
+<code>
+ public static def fact():Stream[Long]=()=>(x());
+ static val x=1~(Stream.longNats(2)*fact());
+</code>
+<tt>fact()</tt> hides the stream being recursively constructed (<tt>x</tt>)
+in a thunk, so that recursive evaluation is delayed. Now <tt>x</tt> can be
+defined with recursive invocations of <tt>x<.tt> replaced by <tt>fact()</tt>.
+(If the call to <tt>fact()</tt> in the body is replaced with
+<tt>x</tt> the compiler will complain of illegal recursive initialization.
+If the body of <tt>fact()</tt> is replaced
+with <tt>x</tt>, the initialization of <tt>x</tt> will not terminate.)
+A <tt>static</tt> rather than an instance method must be used to avoid
+a <tt>this</tt>escaping problem with the closure in the body of the method.
+
+<p> This package may be used as a basis for BigNums.
+
+</html>
