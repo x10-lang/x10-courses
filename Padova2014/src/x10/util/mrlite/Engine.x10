@@ -5,7 +5,27 @@ import x10.util.Pair;
 import x10.util.ArrayList;
 
 /**
- * A simple multi-place, main-memory MR engine using one activity per place
+ * A simple multi-place, iterative, main-memory MR engine using one activity 
+ * per place.
+ * 
+ * Let the number of places be P. 
+ * This engine requires the job to supply a DataSource, a DataSink, a partition
+ * function, a function that determines the termination of iterations, 
+ * a Mapper and a Reducer. 
+ * 
+ * <p> The engine runs simultaneously in P places and uses a clock to synchronize
+ * the work across many places. In each place, the engine uses the 
+ * supplied DataSource to obtain (K1, V1) pairs, runs the supplied Mapper to 
+ * obtain a sequence of (K2, V2) pairs, buckets the results into P partitions, and 
+ * upon completion transmits to place q the (K2,V2) pairs bucketed for q. Once
+ * this has happened at all places, every place has all the incoming (K2, V2) 
+ * pairs. These are shuffled together to produce for each key k in K2 the list of
+ * all values associated with it. These are then fed to the reducer, which 
+ * produces a sequence of (K3, V3) pairs. These are provided to the supplied 
+ * DataSource. Once all places have done this, in each place the engine calls
+ * the provided termination method on the job to determine whether the engine
+ * should continue its execution.
+ * 
  * @author vj
  */
 public class Engine[K1,V1,K2,V2,K3,V3](job:Job[K1,V1,K2,V2,K3,V3]) {
@@ -39,8 +59,7 @@ public class Engine[K1,V1,K2,V2,K3,V3](job:Job[K1,V1,K2,V2,K3,V3]) {
 			val job = plh().job; // local copy
 			val incoming = plh().incoming;
 			for (var i:Int=0n; ! job.stop(); i++) {
-				
-				Clock.advanceAll(); // Wait for everyone to finish the last phase
+				// Prepare and run the mapper
 				val results = new Rail[MyMap[K2,V2]](P, (Long) => new MyMap[K2,V2]());
 				val mSink = new MapperSink[K2,V2]() {
 					public def accept(k:K2,v:V2):void {
@@ -49,28 +68,33 @@ public class Engine[K1,V1,K2,V2,K3,V3](job:Job[K1,V1,K2,V2,K3,V3]) {
 				};
 				for (kv in job.source()) job.mapper(kv.first, kv.second, mSink);
 			
-				for (q in PlaceGroup.WORLD) { // Transmit data to all places
+				// Transmit data to all places
+				for (q in PlaceGroup.WORLD) { 
 					val v = results(q.id);
 					at(q) plh().incoming(p.id)=v;
 				}
 				Clock.advanceAll();
 				
-				// Now process all the incoming data.
+				// Now process all the incoming data, shuffling it together
+				// Note: the items associated with a key are not sorted.
 				var j:Long=0n;
 				for (; incoming(j)==null && j < P; j++);
 				if (j==P) { // received nothing as input
 					job.sink(null); continue;
 				} 
-				val accumulator = incoming(j);
+				val a = incoming(j);
 				incoming(j)=null;
 				for (; ++j < P;) {
-					mergeInto(accumulator, incoming(j));
+					mergeInto(a, incoming(j));
 					incoming(j)=null;
 				}
+				
+				// Now reduce
 				val output = new ArrayList[Pair[K3,V3]]();
-				for (k in accumulator.keySet()) 
-					job.reducer(k,accumulator(k)(), output);
+				for (k in a.keySet()) job.reducer(k,a(k)(), output);
 				job.sink(output);
+				
+				Clock.advanceAll(); // Wait for everyone to finish the last phase
 			}
 		}
 	}
