@@ -41,8 +41,9 @@ public class Histogram(plh:PlaceLocalHandle[Rail[Long]],
 	}
 	public static def test0(args:Rail[String]) {
 		val N = args.size > 0 ? Long.parseLong(args(0)) : 10;
+		Console.OUT.println("N=" + N);
 		val h=new Histogram(PlaceLocalHandle.make(PlaceGroup.WORLD, 
-				():Rail[Long] => new Rail[Long](10, (i:Long)=> i)),
+				():Rail[Long] => new Rail[Long](N, (i:Long)=> i)),
 				PlaceLocalHandle.make(PlaceGroup.WORLD,
 						():ArrayList[Pair[Long,Long]]=> new ArrayList[Pair[Long,Long]]()));
 		new Engine(h).run();
@@ -60,11 +61,12 @@ public class Histogram(plh:PlaceLocalHandle[Rail[Long]],
 			};
 			if (n != N) {
 				Console.OUT.println(here + " error. Expected " + N + " got " + n);
-			}
+			} else 
+				Console.OUT.println("test0 ok.");
 		} catch (s:Exception) {
 			s.printStackTrace();
 		}
-		Console.OUT.println("test0 ok.");
+		
 	}
 	public static def main(args:Rail[String]) {
 		test0(args);
