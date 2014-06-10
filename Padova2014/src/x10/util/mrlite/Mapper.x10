@@ -6,5 +6,5 @@ import x10.util.Pair;
  * zero or more (K2, V2) pairs which are fed to a MapperSink.
  */
 public interface Mapper[K1,V1,K2,V2] {
-	public def mapper(K1, V1, MapperSink[K2,V2]):void;
+	public def mapper(K1, V1, MapperSink[K2,V2]{self!=null}):void;
 }

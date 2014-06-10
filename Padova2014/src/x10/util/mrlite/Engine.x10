@@ -28,26 +28,27 @@ import x10.util.ArrayList;
  * 
  * @author vj
  */
-public class Engine[K1,V1,K2,V2,K3,V3](job:Job[K1,V1,K2,V2,K3,V3]) {
+public class Engine[K1,V1,K2,V2,K3,V3](job:Job[K1,V1,K2,V2,K3,V3]{self!=null}) {
+	static type NN[T]{T haszero} = T{self!=null};
 	static type MyMap[K2,V2] = HashMap[K2,ArrayList[V2]];
 	
-	static def insert[K2,V2](a:MyMap[K2,V2], k:K2, v:V2) {
+	static def insert[K2,V2](a:NN[MyMap[K2,V2]], k:K2, v:V2) {
 		val gr = a.get(k);
 		val gr2 = gr==null? new ArrayList[V2](): gr();
 		gr2.add(v);
 		a.put(k,gr2);
 	}
-	static def insert[K2,V2](a:MyMap[K2,V2], k:K2, v:ArrayList[V2]) {
+	static def insert[K2,V2](a:NN[MyMap[K2,V2]], k:K2, v:ArrayList[V2]) {
 		val gr = a.get(k);
 		val gr2 = gr==null? new ArrayList[V2](): gr();
 		gr2.addAll(v);
 		a.put(k,gr2);
 	}
-	static def mergeInto[K2,V2](a:MyMap[K2,V2], b:MyMap[K2,V2]):void {
+	static def mergeInto[K2,V2](a:NN[MyMap[K2,V2]], b:NN[MyMap[K2,V2]]):void {
 		for (k in b.keySet()) insert(a, k, b(k)());
 	}
-	static class State[K1,V1,K2,V2,K3,V3](job:Job[K1,V1,K2,V2,K3,V3], 
-			incoming:Rail[MyMap[K2,V2]]){}
+	static class State[K1,V1,K2,V2,K3,V3](job:NN[Job[K1,V1,K2,V2,K3,V3]], 
+			incoming:NN[Rail[MyMap[K2,V2]]]){}
 	
 	public def run() {
 	
@@ -66,12 +67,15 @@ public class Engine[K1,V1,K2,V2,K3,V3](job:Job[K1,V1,K2,V2,K3,V3]) {
 						insert(results(job.partition(k) % P), k, v);
 					}
 				};
-				for (kv in job.source()) job.mapper(kv.first, kv.second, mSink);
+				val src = job.source();
+				if (src != null)
+					for (kv in src) job.mapper(kv.first, kv.second, mSink);
 			
 				// Transmit data to all places
 				for (q in PlaceGroup.WORLD) { 
 					val v = results(q.id);
-					at(q) plh().incoming(p.id)=v;
+					if (v.size() > 0)
+						at(q) plh().incoming(p.id)=v;
 				}
 				Clock.advanceAll();
 				
