@@ -3,7 +3,6 @@ import x10.util.mrlite.Job;
 import x10.util.Pair;
 import x10.util.ArrayList;
 import x10.util.mrlite.Engine;
-import x10.util.mrlite.MapperSink;
 
 /**
  * An example of the user of the MRLite API. At each place, a rail contains
@@ -34,8 +33,8 @@ public class Histogram(plh:PlaceLocalHandle[Rail[Long]],
 		
 	}
 	
-	public def mapper(k:Long, v:Long, s:MapperSink[Long,Long]{self!=null}):void {
-		s.accept(v,k);
+	public def mapper(k:Long, v:Long, s:(Long,Long)=>void):void {
+		s(v,k);
 	}
 
 	public def reducer(a:Long, b:Iterable[Long], sink:ArrayList[Pair[Long, Long]]):

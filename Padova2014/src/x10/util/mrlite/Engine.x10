@@ -62,12 +62,10 @@ public class Engine[K1,V1,K2,V2,K3,V3](job:Job[K1,V1,K2,V2,K3,V3]{self!=null}) {
 			for (var i:Int=0n; ! job.stop(); i++) {
 				// Prepare and run the mapper
 				val results = new Rail[MyMap[K2,V2]](P, (Long) => new MyMap[K2,V2]());
-				val mSink = new MapperSink[K2,V2]() {
-					public def accept(k:K2,v:V2):void {
-						insert(results(job.partition(k) % P), k, v);
-					}
-				};
+				val mSink = (k:K2,v:V2)=> {insert(results(job.partition(k) % P), k, v);};
 				val src = job.source();
+				
+				// Map Phase: Call the user-supplied mapper
 				if (src != null)
 					for (kv in src) job.mapper(kv.first, kv.second, mSink);
 			
@@ -95,7 +93,11 @@ public class Engine[K1,V1,K2,V2,K3,V3](job:Job[K1,V1,K2,V2,K3,V3]{self!=null}) {
 				
 				// Now reduce
 				val output = new ArrayList[Pair[K3,V3]]();
+				
+				// Reduce phase: Call the user-suplied reducer
 				for (k in a.keySet()) job.reducer(k,a(k)(), output);
+				
+				// Sink the result to the job.
 				job.sink(output);
 				
 				Clock.advanceAll(); // Wait for everyone to finish the last phase
