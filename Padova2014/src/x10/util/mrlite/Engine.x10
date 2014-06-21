@@ -82,7 +82,7 @@ public class Engine[K1,V1,K2,V2,K3,V3](job:Job[K1,V1,K2,V2,K3,V3]{self!=null}) {
 				// Now process all the incoming data, shuffling it together
 				// Note: the items associated with a key are not sorted.
 				var j:Long=0n;
-				for (; incoming(j)==null && j < P; j++);
+				for (; j < P && incoming(j)==null; j++);
 				if (j==P) { // received nothing as input
 					job.sink(null); continue;
 				} 
